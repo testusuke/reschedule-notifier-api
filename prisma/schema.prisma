@@ -19,11 +19,12 @@ model User {
 }
 
 model Schedule {
-  id         Int       @id @default(autoincrement())
-  content    String
-  note       String?
-  date       DateTime?
-  created_at DateTime  @default(now())
-  issuer     User      @relation(fields: [issuer_id], references: [id])
-  issuer_id  Int
+  id            Int       @id @default(autoincrement())
+  subject       String
+  note          String?
+  target        String?
+  date          DateTime?
+  created_at    DateTime  @default(now())
+  issuer        User      @relation(fields: [issuer_id], references: [id])
+  issuer_id     Int
 }
