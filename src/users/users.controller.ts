@@ -1,36 +1,45 @@
-import { Controller, Get, Param, Post, Body, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Body,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from '@prisma/client';
-import * as bcrypt from 'bcrypt';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @UseGuards(AuthGuard('validation'))
   @Get(':id')
   async findUserById(@Param('id') id: string): Promise<User> {
     return this.usersService.user(Number(id));
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get()
   async users(): Promise<User[]> {
     return this.usersService.users();
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Post()
   async createUser(
     @Body('username') username: string,
     @Body('password') password: string,
   ): Promise<User> {
-    const salt = await bcrypt.genSalt();
-    const hashed = await bcrypt.hash(password, salt);
-
     return this.usersService.createUser({
       username: username,
-      password: hashed,
+      password: password,
     });
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   async deleteUser(@Param('id') id: string): Promise<string> {
     await this.usersService.deleteUser(Number(id));
