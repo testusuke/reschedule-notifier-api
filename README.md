@@ -8,7 +8,7 @@ REST-API of web app that notify rescheduled information.
 **PUBLIC Key supports only PEM format.**
 ```dotenv
 # MySQL Setting
-DATABASE_URL="mysql://root:password@localhost:3308/rna_db"
+DATABASE_URL="mysql://root:password@localhost:3306/DB"
 
 # JWT secret
 JWT_PUBLIC_KEY="-----BEGIN RSA PUBLIC KEY-----\n
