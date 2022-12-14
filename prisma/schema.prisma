@@ -15,7 +15,6 @@ model User {
   username   String
   password   String
   created_at DateTime   @default(now())
-  Schedule   Schedule[]
 }
 
 model Schedule {
@@ -25,6 +24,5 @@ model Schedule {
   target        String?
   date          DateTime?
   created_at    DateTime  @default(now())
-  issuer        User      @relation(fields: [issuer_id], references: [id])
   issuer_id     Int
 }

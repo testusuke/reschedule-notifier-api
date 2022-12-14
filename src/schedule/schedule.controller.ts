@@ -1,9 +1,23 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Request, UseGuards } from "@nestjs/common";
-import { ScheduleService } from "./schedule.service";
-import { Schedule, User } from "@prisma/client";
-import { AuthGuard } from "@nestjs/passport";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
+import { ScheduleService } from './schedule.service';
+import { Schedule, User } from '@prisma/client';
+import { AuthGuard } from '@nestjs/passport';
 
-type PasswordOmitUser = Omit<User, 'password'>;
+interface JwtPayload {
+  userId: User['id'];
+  username: User['username'];
+}
+
 @Controller('schedule')
 export class ScheduleController {
   constructor(private readonly scheduleService: ScheduleService) {}
@@ -29,7 +43,7 @@ export class ScheduleController {
   @UseGuards(AuthGuard('jwt'))
   @Post('')
   async createSchedule(
-    @Request() req: { user: PasswordOmitUser },
+    @Request() req: { user: JwtPayload },
     @Body('subject') subject: string,
     @Body('note') note?: string,
     @Body('target') target?: string,
@@ -39,16 +53,16 @@ export class ScheduleController {
       subject: subject,
       note: note,
       target: target,
-      date: date,
-      issuer_id: req.user.id,
+      date: new Date(date),
+      issuer_id: req.user.userId,
     });
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
   async updateSchedule(
-    @Request() req: { user: PasswordOmitUser },
-    @Param(':id') id: string,
+    @Request() req: { user: JwtPayload },
+    @Param('id') id: string,
     @Body('subject') subject: string,
     @Body('note') note?: string,
     @Body('target') target?: string,
@@ -58,8 +72,8 @@ export class ScheduleController {
       subject: subject,
       note: note,
       target: target,
-      date: date,
-      issuer_id: req.user.id,
+      date: new Date(date),
+      issuer_id: req.user.userId,
     });
   }
 }

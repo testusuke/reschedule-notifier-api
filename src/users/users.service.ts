@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { User, Prisma } from '@prisma/client';
 import { ConfigService } from '@nestjs/config';
-import * as bcrypt from "bcrypt";
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -12,7 +12,9 @@ export class UsersService {
   ) {}
 
   onModuleInit() {
-    const systemUserPass = this.configService.get<string>('SYSTEM_USER_PASSWORD');
+    const systemUserPass = this.configService.get<string>(
+      'SYSTEM_USER_PASSWORD',
+    );
     if (systemUserPass) {
       this.createUser({
         username: 'system',
@@ -63,7 +65,6 @@ export class UsersService {
   }
 
   async deleteUser(id: number): Promise<void> {
-    console.log(id);
     await this.prisma.user.delete({
       where: { id },
     });

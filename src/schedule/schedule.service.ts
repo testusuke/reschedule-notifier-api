@@ -16,13 +16,14 @@ export class ScheduleService {
     });
   }
 
-  async createSchedule(data: Prisma.ScheduleUncheckedCreateInput) {
+  async createSchedule(data: Prisma.ScheduleCreateInput) {
+    console.log(data.issuer_id);
     return this.prisma.schedule.create({
       data,
     });
   }
 
-  async updateSchedule(id: number, data: Prisma.ScheduleUncheckedUpdateInput) {
+  async updateSchedule(id: number, data: Prisma.ScheduleUpdateInput) {
     return this.prisma.schedule.update({
       data,
       where: {
