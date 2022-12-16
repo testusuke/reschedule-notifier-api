@@ -6,17 +6,11 @@ import {
   Param,
   Patch,
   Post,
-  Request,
   UseGuards,
 } from '@nestjs/common';
 import { ScheduleService } from './schedule.service';
-import { Schedule, User } from '@prisma/client';
+import { Schedule } from '@prisma/client';
 import { AuthGuard } from '@nestjs/passport';
-
-interface JwtPayload {
-  userId: User['id'];
-  username: User['username'];
-}
 
 @Controller('schedule')
 export class ScheduleController {
@@ -43,7 +37,7 @@ export class ScheduleController {
   @UseGuards(AuthGuard('jwt'))
   @Post('')
   async createSchedule(
-    @Request() req: { user: JwtPayload },
+    @Body('board_id') board_id: string,
     @Body('subject') subject: string,
     @Body('note') note?: string,
     @Body('target') target?: string,
@@ -54,15 +48,19 @@ export class ScheduleController {
       note: note,
       target: target,
       date: new Date(date),
-      issuer_id: req.user.userId,
+      board: {
+        connect: {
+          id: Number(board_id),
+        },
+      },
     });
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
   async updateSchedule(
-    @Request() req: { user: JwtPayload },
     @Param('id') id: string,
+    @Body('board_id') board_id: string,
     @Body('subject') subject: string,
     @Body('note') note?: string,
     @Body('target') target?: string,
@@ -73,7 +71,11 @@ export class ScheduleController {
       note: note,
       target: target,
       date: new Date(date),
-      issuer_id: req.user.userId,
+      board: {
+        connect: {
+          id: Number(board_id),
+        },
+      },
     });
   }
 }
