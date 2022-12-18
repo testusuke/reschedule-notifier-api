@@ -17,7 +17,6 @@ export class ScheduleService {
   }
 
   async createSchedule(data: Prisma.ScheduleCreateInput) {
-    console.log(data.issuer_id);
     return this.prisma.schedule.create({
       data,
     });

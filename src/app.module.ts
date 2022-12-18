@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { AccountModule } from './account/account.module';
 import { ScheduleModule } from './schedule/schedule.module';
+import { BoardsModule } from './boards/boards.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ScheduleModule } from './schedule/schedule.module';
     AuthModule,
     AccountModule,
     ScheduleModule,
+    BoardsModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
