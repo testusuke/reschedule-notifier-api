@@ -28,10 +28,12 @@ export class ScheduleController {
 
   @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
-  async deleteSchedule(@Param('id') id: string): Promise<string> {
+  async deleteSchedule(@Param('id') id: string): Promise<object> {
     await this.scheduleService.deleteSchedule(Number(id));
 
-    return 'ok';
+    return {
+      message: 'ok',
+    };
   }
 
   @UseGuards(AuthGuard('jwt'))

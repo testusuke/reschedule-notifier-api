@@ -28,10 +28,12 @@ export class BoardsController {
 
   @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
-  async deleteBoard(@Param('id') id: string): Promise<string> {
+  async deleteBoard(@Param('id') id: string): Promise<object> {
     await this.boardsService.deleteBoard(Number(id));
 
-    return 'ok';
+    return {
+      message: 'ok',
+    };
   }
 
   @UseGuards(AuthGuard('jwt'))

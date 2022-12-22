@@ -41,10 +41,20 @@ export class BoardsService {
   }
 
   async deleteBoard(id: number) {
-    this.prisma.board.delete({
+    //  remove all schedule
+    const deletedSchedule = this.prisma.schedule.deleteMany({
+      where: {
+        board_id: id,
+      },
+    });
+
+    //  remove board
+    const deletedBoard = this.prisma.board.delete({
       where: {
         id: id,
       },
     });
+
+    await this.prisma.$transaction([deletedSchedule, deletedBoard]);
   }
 }
